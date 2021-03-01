@@ -1,0 +1,13 @@
+# Blender MTL File: 'Zona_D_Maceracija.blend'
+# Material Count: 1
+
+newmtl Material_0.002
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd D:\\3D  talpykla\\Iliostome for VR Test Project\\Iliostoma su plokštele nevalyta su maceracija\\Iliostoma su plokštele nevalyta su maceracija 02\\Iliostoma su plokštele nevalyta su maceracija 0201.jpg
