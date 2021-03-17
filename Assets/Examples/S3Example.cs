@@ -56,12 +56,12 @@ namespace AWSSDK.Examples
         void Start()
         {
             UnityInitializer.AttachToGameObject(this.gameObject);
-            AWSConfigs.HttpClient = AWSConfigs.HttpClientOption.UnityWebRequest;
             /*GetBucketListButton.onClick.AddListener(() => { GetBucketList(); });
             PostBucketButton.onClick.AddListener(() => { PostObject(); });
             GetObjectsListButton.onClick.AddListener(() => { GetObjects(); });
             DeleteObjectButton.onClick.AddListener(() => { DeleteObject(); });*/
             GetObjectButton.onClick.AddListener(() => { GetObject(); });
+            AWSConfigs.HttpClient = AWSConfigs.HttpClientOption.UnityWebRequest;
         }
 
         #region private members
