@@ -27,6 +27,7 @@ using Amazon.CognitoIdentity;
 using Amazon;
 using UnityEngine.XR.ARFoundation;
 using Dummiesman;
+using CandyCoded.ARFoundationComponents;
 
 namespace AWSSDK.Examples
 {
@@ -44,7 +45,8 @@ namespace AWSSDK.Examples
             get { return RegionEndpoint.GetBySystemName(S3Region); }
         }
         public string S3BucketName = null;
-        public string SampleFileName = null;
+        public string SampleObjFileName = null;
+        public string SampleMaterialFileName = null;
         /*public Button GetBucketListButton = null;
         public Button PostBucketButton = null;
         public Button GetObjectsListButton = null;
@@ -126,27 +128,39 @@ namespace AWSSDK.Examples
         /// </summary>
         private void GetObject()
         {
-            ResultText.text = string.Format("fetching {0} from bucket {1}", SampleFileName, S3BucketName);
+            ResultText.text = string.Format("fetching {0} from bucket {1}", SampleObjFileName, S3BucketName);
             Debug.Log("Reached method");
             Debug.Log(ArObject.gameObject.name);
-            Client.GetObjectAsync(S3BucketName, SampleFileName, (responseObj) =>
+
+            // Get Material
+            Stream materialFile = null;
+            Client.GetObjectAsync(S3BucketName, SampleMaterialFileName, (responseObj) =>
             {
-                Debug.Log(string.Format("{0} {1}", S3BucketName, SampleFileName));
+                var response = responseObj.Response;
+                if (response.ResponseStream != null)
+                {
+                    materialFile = response.ResponseStream;
+                }
+            });
+            // Get Object
+            Client.GetObjectAsync(S3BucketName, SampleObjFileName, (responseObj) =>
+            {
+                Debug.Log(string.Format("{0} {1}", S3BucketName, SampleObjFileName));
                 Stream data = null;
                 var response = responseObj.Response;
                 Debug.Log(string.Format("lets go {0}", response.ToString()));
                 if (response.ResponseStream != null)
                 {
-                    /*using (StreamReader reader = new StreamReader(response.ResponseStream))
-                    {
-                        data = reader.BaseStream.BeginRead
-                    }*/
                     data = response.ResponseStream;
                     ResultText.text += "\n SUCCESS!";
-                    Debug.Log(string.Format("done"));
 
-                    ArObject = new OBJLoader().Load(data);
-                    // ResultText.text += data;
+                    var ObjectCreated = new OBJLoader().Load(data, materialFile);
+                    Debug.Log("New loaded obj:" + ObjectCreated.ToString());
+
+                    ArObject = ObjectCreated;
+                    Debug.Log("New obj:" + ArObject.ToString());
+                    ArObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                    ArObject.SetActive(false);
                 }
             });
         }
@@ -222,11 +236,11 @@ namespace AWSSDK.Examples
         /// </summary>
         public void DeleteObject()
         {
-            ResultText.text = string.Format("deleting {0} from bucket {1}", SampleFileName, S3BucketName);
+            ResultText.text = string.Format("deleting {0} from bucket {1}", SampleObjFileName, S3BucketName);
             List<KeyVersion> objects = new List<KeyVersion>();
             objects.Add(new KeyVersion()
             {
-                Key = SampleFileName
+                Key = SampleObjFileName
             });
 
             var request = new DeleteObjectsRequest()
@@ -261,7 +275,7 @@ namespace AWSSDK.Examples
 
         private string GetFileHelper()
         {
-            var fileName = SampleFileName;
+            var fileName = SampleObjFileName;
 
             if (!File.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + fileName))
             {

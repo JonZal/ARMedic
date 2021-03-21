@@ -201,7 +201,7 @@ namespace Dummiesman
                     {
 						bool newLinePassed;
 						buffer.SkipWhitespaces(out newLinePassed);
-						if (newLinePassed == true) {
+						if (newLinePassed == true || buffer.endReached) {
 							break;
 						}
 

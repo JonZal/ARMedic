@@ -109,7 +109,12 @@ namespace Dummiesman {
 			if (isNegative == true) {
 				this.MoveNext();
 			}
-			
+			bool isPositive = this.currentChar == '+';
+			if (isPositive == true)
+			{
+				this.MoveNext();
+			}
+
 			while (this.currentChar >= '0' && this.currentChar <= '9') {
 				var digit = this.currentChar - '0';
 				result = result * 10 + digit;
