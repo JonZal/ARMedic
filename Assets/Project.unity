@@ -712,8 +712,8 @@ MonoBehaviour:
   CognitoIdentityRegion: us-east-2
   S3Region: us-east-2
   S3BucketName: testbucketjonzal
-  SampleObjFileName: Pilnas_Iliostoma.obj
-  SampleMaterialFileName: Pilnas_Iliostoma.jpg
+  SampleObjFileName: Pilnas_Modelis_Nr_1_Iliostoma.obj
+  SampleMaterialFileName: Pilnas_Modelis_Nr_1_Iliostoma.mtl
   GetObjectButton: {fileID: 125230512}
   ResultText: {fileID: 2081588921}
   ArObject: {fileID: 282516406}

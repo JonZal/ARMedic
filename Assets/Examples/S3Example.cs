@@ -134,35 +134,60 @@ namespace AWSSDK.Examples
 
             // Get Material
             Stream materialFile = null;
-            Client.GetObjectAsync(S3BucketName, SampleMaterialFileName, (responseObj) =>
+            if (!File.Exists(Path.Combine(Application.persistentDataPath, SampleMaterialFileName)))
             {
-                var response = responseObj.Response;
-                if (response.ResponseStream != null)
+                Client.GetObjectAsync(S3BucketName, SampleMaterialFileName, (responseObj) =>
                 {
-                    materialFile = response.ResponseStream;
-                }
-            });
+                    var response = responseObj.Response;
+                    if (response.ResponseStream != null)
+                    {
+                        materialFile = response.ResponseStream;
+                        using (var fs = System.IO.File.Create(Path.Combine(Application.persistentDataPath, SampleMaterialFileName)))
+                        {
+                            byte[] buffer = new byte[81920];
+                            int count;
+                            while ((count = response.ResponseStream.Read(buffer, 0, buffer.Length)) != 0)
+                                fs.Write(buffer, 0, count);
+                            fs.Flush();
+                            Debug.Log(string.Format("Material file got to {0}", Path.Combine(Application.persistentDataPath, SampleMaterialFileName)));
+                        }
+
+                    }
+                });
+            }
             // Get Object
-            Client.GetObjectAsync(S3BucketName, SampleObjFileName, (responseObj) =>
+            if (!File.Exists(Path.Combine(Application.persistentDataPath, SampleObjFileName)))
             {
-                Debug.Log(string.Format("{0} {1}", S3BucketName, SampleObjFileName));
-                Stream data = null;
-                var response = responseObj.Response;
-                Debug.Log(string.Format("lets go {0}", response.ToString()));
-                if (response.ResponseStream != null)
+                Client.GetObjectAsync(S3BucketName, SampleObjFileName, (responseObj) =>
                 {
-                    data = response.ResponseStream;
-                    ResultText.text += "\n SUCCESS!";
+                    Debug.Log(string.Format("{0} {1}", S3BucketName, SampleObjFileName));
+                    Stream data = null;
+                    var response = responseObj.Response;
+                    Debug.Log(string.Format("lets go {0}", response.ToString()));
+                    if (response.ResponseStream != null)
+                    {
+                        data = response.ResponseStream;
+                        ResultText.text += "\n SUCCESS!";
 
-                    var ObjectCreated = new OBJLoader().Load(data, materialFile);
-                    Debug.Log("New loaded obj:" + ObjectCreated.ToString());
+                        using (var fs = System.IO.File.Create(Path.Combine(Application.persistentDataPath, SampleObjFileName)))
+                        {
+                            byte[] buffer = new byte[81920];
+                            int count;
+                            while ((count = response.ResponseStream.Read(buffer, 0, buffer.Length)) != 0)
+                                fs.Write(buffer, 0, count);
+                            fs.Flush();
+                        }
+                    }
+                });
+            }
 
-                    ArObject = ObjectCreated;
-                    Debug.Log("New obj:" + ArObject.ToString());
-                    ArObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-                    ArObject.SetActive(false);
-                }
-            });
+            var ObjectCreated = new OBJLoader().Load(Path.Combine(Application.persistentDataPath, SampleObjFileName));
+            Debug.Log("New loaded obj:" + ObjectCreated.ToString());
+
+            ArObject = ObjectCreated;
+            Debug.Log("New obj:" + ArObject.ToString());
+            ArObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            ArObject.SetActive(true);
         }
 
         /// <summary>
