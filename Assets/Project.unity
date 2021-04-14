@@ -708,12 +708,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fa7de8866404054591507da4f1293de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IdentityPoolId: us-east-2:f25c0af9-968a-4115-834a-485e759c60be
-  CognitoIdentityRegion: us-east-2
-  S3Region: us-east-2
-  S3BucketName: testbucketjonzal
-  SampleObjFileName: Pilnas_Modelis_Nr_1_Iliostoma.obj
-  SampleMaterialFileName: Pilnas_Modelis_Nr_1_Iliostoma.mtl
+  IdentityPoolId: eu-central-1:3e1e8163-c599-4de9-a1ea-ca78fa19eee4
+  CognitoIdentityRegion: eu-central-1
+  S3Region: eu-central-1
+  S3BucketName: armedicmodels
+  SampleObjFileName: Iliostoma_2OBJ.obj
+  SampleMaterialFileName: Iliostoma_2OBJ.mtl
   GetObjectButton: {fileID: 125230512}
   ResultText: {fileID: 2081588921}
   ArObject: {fileID: 282516406}

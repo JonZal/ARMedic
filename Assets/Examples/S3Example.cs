@@ -34,12 +34,12 @@ namespace AWSSDK.Examples
     public class S3Example : MonoBehaviour
     {
         public string IdentityPoolId = "";
-        public string CognitoIdentityRegion = RegionEndpoint.USEast1.SystemName;
+        public string CognitoIdentityRegion = RegionEndpoint.EUCentral1.SystemName;
         private RegionEndpoint _CognitoIdentityRegion
         {
             get { return RegionEndpoint.GetBySystemName(CognitoIdentityRegion); }
         }
-        public string S3Region = RegionEndpoint.USEast1.SystemName;
+        public string S3Region = RegionEndpoint.EUCentral1.SystemName;
         private RegionEndpoint _S3Region
         {
             get { return RegionEndpoint.GetBySystemName(S3Region); }
@@ -132,13 +132,24 @@ namespace AWSSDK.Examples
             Debug.Log("Reached method");
             Debug.Log(ArObject.gameObject.name);
 
+            bool materialFileExists = false;
+            try
+            {
+                materialFileExists = File.Exists(Path.Combine(Application.persistentDataPath, SampleMaterialFileName));
+            }
+            catch (Exception e)
+            {
+                materialFileExists = false;
+            }
             // Get Material
             Stream materialFile = null;
-            if (!File.Exists(Path.Combine(Application.persistentDataPath, SampleMaterialFileName)))
-            {
+            //if (!materialFileExists)
+          //  {
                 Client.GetObjectAsync(S3BucketName, SampleMaterialFileName, (responseObj) =>
                 {
+                    Debug.Log(string.Format("{0} {1}", S3BucketName, SampleMaterialFileName));
                     var response = responseObj.Response;
+                    Debug.Log(string.Format("lets go {0}", response.ToString()));
                     if (response.ResponseStream != null)
                     {
                         materialFile = response.ResponseStream;
@@ -154,9 +165,18 @@ namespace AWSSDK.Examples
 
                     }
                 });
+          //  }
+            bool fileExists = false;
+            try
+            {
+                fileExists = File.Exists(Path.Combine(Application.persistentDataPath, SampleObjFileName));
+            }
+            catch(Exception e)
+            {
+                fileExists = false;
             }
             // Get Object
-            if (!File.Exists(Path.Combine(Application.persistentDataPath, SampleObjFileName)))
+            if (!fileExists)
             {
                 Client.GetObjectAsync(S3BucketName, SampleObjFileName, (responseObj) =>
                 {
@@ -178,16 +198,27 @@ namespace AWSSDK.Examples
                             fs.Flush();
                         }
                     }
+
+                    var ObjectCreated = new OBJLoader().Load(Path.Combine(Application.persistentDataPath, SampleObjFileName));
+                    Debug.Log("New loaded obj:" + ObjectCreated.ToString());
+
+                    ArObject = ObjectCreated;
+                    Debug.Log("New obj:" + ArObject.ToString());
+                    ArObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                    ArObject.SetActive(true);
+
                 });
             }
+            else
+            {
+                var ObjectCreated = new OBJLoader().Load(Path.Combine(Application.persistentDataPath, SampleObjFileName));
+                Debug.Log("New loaded obj:" + ObjectCreated.ToString());
 
-            var ObjectCreated = new OBJLoader().Load(Path.Combine(Application.persistentDataPath, SampleObjFileName));
-            Debug.Log("New loaded obj:" + ObjectCreated.ToString());
-
-            ArObject = ObjectCreated;
-            Debug.Log("New obj:" + ArObject.ToString());
-            ArObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-            ArObject.SetActive(true);
+                ArObject = ObjectCreated;
+                Debug.Log("New obj:" + ArObject.ToString());
+                ArObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                ArObject.SetActive(true);
+            }
         }
 
         /// <summary>
