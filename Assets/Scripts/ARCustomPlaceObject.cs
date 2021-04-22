@@ -38,8 +38,6 @@ namespace UnityCustomObj
 
         private bool _objectToPlaceActiveState;
 
-        private bool placedAtLeastOne;
-
         private ARPlaneManager _planeManager;
 
         private void Awake()
@@ -52,14 +50,12 @@ namespace UnityCustomObj
         {
             Debug.Log("Start");
             UnityInitializer.AttachToGameObject(this.gameObject);
-            placedAtLeastOne = false;
             ResetObjectButton.onClick.AddListener(() => { ResetObject(); });
         }
 
         public void ResetObject()
         {
             Debug.Log("ResetObject");
-            placedAtLeastOne = false;
             GameObjectPlaced.RemoveAllListeners();
             _planeManager.enabled = true;
             Debug.LogFormat("Plane manager enabled: {0}", _planeManager.enabled.ToString());
@@ -100,33 +96,17 @@ namespace UnityCustomObj
                 cameraPosition.z
             ));
 
-            //if (!placedAtLeastOne || placeMultiple)
-           // {
-                placedAtLeastOne = true;
-                GameObjectPlaced?.Invoke(objectToPlaceGameObject);
+            GameObjectPlaced?.Invoke(objectToPlaceGameObject);
             Debug.Log("Object placed");
             _planeManager.enabled = false;
             Debug.LogFormat("Plane manager enabled: {0}", _planeManager.enabled.ToString());
-            // }
         }
 
         private void OnEnable()
         {
-            placedAtLeastOne = false;
-            if (!objectToPlace || !objectToPlace.scene.IsValid())// || objectToPlace.name == "EmptyObject")
-            {
-                /*Debug.Log("didn't invoke object to place");
-                if (GameObject.Find("Pilnas_Modelis_Nr_1_Iliostoma") != null)
-                {
-                    objectToPlace = GameObject.Find("Pilnas_Modelis_Nr_1_Iliostoma");
-                    Debug.Log("Found S3 object");
-                }
-                else
-                {
-                    Invoke("OnEnable", 5);
-                    return;
-                }*/
-                Invoke("OnEnable", 5);
+            if (!objectToPlace || !objectToPlace.scene.IsValid())
+            { 
+                Invoke("OnEnable", 1);
                 return;
             }
             Debug.Log("ARCustomPlaceObject do be workin");
