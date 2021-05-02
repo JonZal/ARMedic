@@ -35,6 +35,7 @@ public class SelectionHighlight : MonoBehaviour
         answerButtons[0].onClick.AddListener(() => { ChangeSelectedObject(0); });
         answerButtons[1].onClick.AddListener(() => { ChangeSelectedObject(1); });
         answerButtons[2].onClick.AddListener(() => { ChangeSelectedObject(2); });
+        answerButtons[3].onClick.AddListener(() => { ChangeSelectedObject(3); });
         resetColorsButton.onClick.AddListener(() => { ResetColors(); });
         SetupColors();
     }

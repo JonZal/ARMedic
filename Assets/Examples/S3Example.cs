@@ -137,7 +137,7 @@ namespace AWSSDK.Examples
             {
                 materialFileExists = File.Exists(Path.Combine(Application.persistentDataPath, SampleMaterialFileName));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 materialFileExists = false;
             }
@@ -171,7 +171,7 @@ namespace AWSSDK.Examples
             {
                 fileExists = File.Exists(Path.Combine(Application.persistentDataPath, SampleObjFileName));
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 fileExists = false;
             }

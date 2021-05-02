@@ -25,7 +25,11 @@ namespace CandyCoded.ARFoundationComponents
         public float verticalOffset = 0.01f;
 #pragma warning restore CS0649
 
+#pragma warning disable CS0436
+
         public GameObjectPlacedEvent GameObjectPlaced;
+
+#pragma warning restore CS0436
 
         public Camera mainCamera { get; private set; }
 

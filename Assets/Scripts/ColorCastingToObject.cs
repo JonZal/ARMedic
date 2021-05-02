@@ -26,7 +26,7 @@ public class ColorCastingToObject : MonoBehaviour
     private Vector2 touchPosition = default;
 
     [SerializeField]
-    private bool displayOverlay = false;
+    //private bool displayOverlay = false;
 
     void Awake()
     {
