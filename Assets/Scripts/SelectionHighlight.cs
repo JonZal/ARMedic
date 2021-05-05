@@ -36,6 +36,8 @@ public class SelectionHighlight : MonoBehaviour
         answerButtons[1].onClick.AddListener(() => { ChangeSelectedObject(1); });
         answerButtons[2].onClick.AddListener(() => { ChangeSelectedObject(2); });
         answerButtons[3].onClick.AddListener(() => { ChangeSelectedObject(3); });
+        answerButtons[4].onClick.AddListener(() => { ChangeSelectedObject(4); });
+        answerButtons[5].onClick.AddListener(() => { ChangeSelectedObject(5); });
         resetColorsButton.onClick.AddListener(() => { ResetColors(); });
         SetupColors();
     }
@@ -43,8 +45,13 @@ public class SelectionHighlight : MonoBehaviour
     void ResetColors()
     {
         int i = 0;
+        ChangeSelectedObject(-1);
         foreach (SelectedObject current in placedObjects)
         {
+            if (current.Selected)
+            {
+                //current.transform.position = new Vector3(current.transform.position.x, current.transform.position.y - 0.001f, current.transform.position.z);
+            }
             MeshRenderer meshRenderer = current.GetComponent<MeshRenderer>();
             meshRenderer.material.color = originalColors[i];
             i++;
@@ -76,17 +83,26 @@ public class SelectionHighlight : MonoBehaviour
                 //Debug.Log("Inactivated object");
                 Debug.LogFormat("Inactivated obj {0}", i);
                 Debug.LogFormat("Selected idx {0}", selectedIndex);
-                current.Selected = false;
-                //meshRenderer.material.color = originalColors
-                meshRenderer.material.color = inactiveColor;
+                if(current.Selected)
+                {
+                    current.gameObject.SetActive(false);
+                    current.transform.position = new Vector3(current.transform.position.x, current.transform.position.y - 0.001f, current.transform.position.z);
+                    current.Selected = false;
+                    meshRenderer.material.color = inactiveColor;
+                }
             }
             else
             {
                 //Debug.Log("Activated object");
                 Debug.LogFormat("Activated obj {0}", i);
                 Debug.LogFormat("Selected idx {0}", selectedIndex);
-                current.Selected = true;
-                meshRenderer.material.color = originalColors[i];
+                if (!current.Selected)
+                {
+                    current.gameObject.SetActive(true);
+                    current.transform.position = new Vector3(current.transform.position.x, current.transform.position.y + 0.001f, current.transform.position.z);
+                    current.Selected = true;
+                    meshRenderer.material.color = originalColors[i];
+                }
             }
             i++;
         }
